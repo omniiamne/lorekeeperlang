@@ -41,7 +41,16 @@
         </div>
         <div class="world-entry-text">
             @if(isset($item->reference) && $item->reference && Config::get('lorekeeper.extensions.item_entry_expansion.extra_fields'))  <p><strong>Reference Link:</strong> <a href="{{ $item->reference }}">{{ $item->reference }}</a></p> @endif
-            {!! $description !!}
+            
+			@php
+			$locale = app()->getLocale(); // 'en' или 'ru'
+			$field = 'description_' . $locale;
+			$description = $item->{$field} ?? '';
+			@endphp
+
+			<div class="content">
+				{!! $description !!}
+			</div>
             @if((isset($item->uses) && $item->uses || isset($item->source) && $item->source || $shops->count() || isset($item->data['prompts']) && $item->data['prompts']) && Config::get('lorekeeper.extensions.item_entry_expansion.extra_fields'))
             <div class="text-right"><a data-toggle="collapse" href="#item-{{ $item->id }}" class="text-primary"><strong>Show details...</strong></a></div>
             <div class="collapse" id="item-{{ $item->id }}">
