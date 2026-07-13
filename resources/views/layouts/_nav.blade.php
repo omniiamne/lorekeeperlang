@@ -119,9 +119,9 @@
                         Accessibility
                     </a>
 
-                    <div class="dropdown-menu" aria-labelledby="Accessibilitydropdown">
-                        <a href="{{ route('set-locale', ['locale' => 'en']) }}">English</a>
-						<a href="{{ route('set-locale', ['locale' => 'ru']) }}">Русский</a>
+                    <div class="dropdown-menu" aria-labelledby="Accessibilitydropdown">					
+                        <a class="dropdown-item" href="{{ route('set-locale', ['locale' => 'en']) }}">English</a>					
+						<a class="dropdown-item" href="{{ route('set-locale', ['locale' => 'ru']) }}">Русский</a>						
                     </div>
                 </li>
                 <li class="nav-item">
