@@ -114,6 +114,16 @@
                         </a>
                     </div>
                 </li>
+				<li class="nav-item dropdown">
+                    <a id="Accessibilitydropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        Accessibility
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="Accessibilitydropdown">
+                        <a href="{{ route('set-locale', ['locale' => 'en']) }}">English</a>
+						<a href="{{ route('set-locale', ['locale' => 'ru']) }}">Русский</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('gallery') }}">Gallery</a>
                 </li>

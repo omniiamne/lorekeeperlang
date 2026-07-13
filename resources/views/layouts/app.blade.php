@@ -168,6 +168,55 @@
                     });
                 });
         </script>
+				
+	
+<script>
+    window.CURRENT_LOCALE = '{{ app()->getLocale() }}';
+</script>
+
+
+<script>
+(function() {
+    const locale = window.CURRENT_LOCALE || 'en';
+    const attrBase = 'data-i18n';
+    const attrEn = 'data-i18n-en';
+    const attrRu = 'data-i18n-ru';
+
+    document.querySelectorAll(`[${attrBase}]`).forEach(el => {
+        let text = '';
+        if (locale === 'ru') {
+            text = el.getAttribute(attrRu) || el.getAttribute(attrEn) || '';
+        } else {
+            text = el.getAttribute(attrEn) || el.getAttribute(attrRu) || '';
+        }
+        el.textContent = text;
+    });
+})();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const newLocale = btn.getAttribute('data-locale');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+            await fetch('/set-locale', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ locale: newLocale })
+            });
+            window.location.reload();
+        });
+    });
+});
+</script>
+	
+		
     </div>
 </body>
 </html>
