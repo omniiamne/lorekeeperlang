@@ -29,6 +29,9 @@ class ItemController extends Controller
     | Handles creation/editing of item categories and items.
     |
     */
+	
+	
+
 
     /**********************************************************************************************
 
@@ -227,7 +230,7 @@ class ItemController extends Controller
     {
         $id ? $request->validate(Item::$updateRules) : $request->validate(Item::$createRules);
         $data = $request->only([
-            'name', 'allow_transfer', 'item_category_id', 'description', 'image', 'remove_image', 'rarity',
+            'name', 'allow_transfer', 'item_category_id', 'description_en', 'description_ru', 'image', 'remove_image', 'rarity',
             'reference_url', 'artist_id', 'artist_url', 'uses', 'shops', 'prompts', 'release', 'currency_id', 'currency_quantity',
             'is_released'
         ]);

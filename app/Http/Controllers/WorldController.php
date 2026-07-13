@@ -289,20 +289,38 @@ class WorldController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getItem($id)
-    {
-        $categories = ItemCategory::orderBy('sort', 'DESC')->get();
-        $item = Item::where('id', $id)->released()->first();
-        if(!$item) abort(404);
+{
+    \Log::info('>>> START getItem >>> ID: ' . $id);
+
+    try {
+        \Log::info('Locale (app): ' . app()->getLocale());
+        \Log::info('Session locale: ' . (session('locale') ?? 'null'));
+
+        // Минимальная безопасная загрузка элемента
+        $item = \App\Models\Item::find($id);
+
+        if (!$item) {
+            \Log::warning('Item not found for ID: ' . $id);
+            abort(404);
+        }
+
+        \Log::info('Item loaded: ID=' . $item->id . ', name=' . ($item->displayName ?? 'no name'));
 
         return view('world.item_page', [
             'item' => $item,
-            'imageUrl' => $item->imageUrl,
-            'name' => $item->displayName,
-            'description' => $item->parsed_description,
-            'categories' => $categories->keyBy('id'),
-            'shops' => Shop::whereIn('id', ShopStock::where('item_id', $item->id)->pluck('shop_id')->unique()->toArray())->orderBy('sort', 'DESC')->get()
+            'imageUrl' => null,
+            'name' => $item->displayName ?? 'No name',
+            'categories' => collect(),
+            'shops' => collect()
         ]);
+    } catch (\Exception $e) {
+        \Log::error('Exception in getItem: ' . $e->getMessage());
+        \Log::error($e->getTraceAsString());
+        throw $e;
     }
+}
+
+
 
     /**
      * Shows the character categories page.
@@ -335,6 +353,12 @@ class WorldController extends Controller
             'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
+
+	public function __construct()
+{
+    \Log::info('>>> CONSTRUCTOR WorldController CALLED');
+}
+
 
     /**
      * Shows the prompts page.
@@ -390,4 +414,11 @@ class WorldController extends Controller
             'categories' => ['none' => 'Any Category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray()
         ]);
     }
+	public function edit($id)
+{
+    $item = Item::findOrFail($id);
+    return view('items.edit', compact('item'));
+}
+
+
 }
