@@ -21,7 +21,7 @@ class Item extends Model
      */
     protected $fillable = [
         'item_category_id', 'name', 'has_image', 'description', 'parsed_description', 'allow_transfer',
-        'data', 'reference_url', 'artist_alias', 'artist_url', 'artist_id', 'is_released'
+        'data', 'reference_url', 'artist_alias', 'artist_url', 'artist_id', 'is_released', 'description_en', 'description_ru'
     ];
 
     protected $appends = ['image_url'];
@@ -41,7 +41,8 @@ class Item extends Model
     public static $createRules = [
         'item_category_id' => 'nullable',
         'name' => 'required|unique:items|between:3,100',
-        'description' => 'nullable',
+        'description_en' => 'nullable|string',
+		'description_ru' => 'nullable|string',
         'image' => 'mimes:png',
         'rarity' => 'nullable',
         'reference_url' => 'nullable|between:3,200',
@@ -58,7 +59,8 @@ class Item extends Model
     public static $updateRules = [
         'item_category_id' => 'nullable',
         'name' => 'required|between:3,100',
-        'description' => 'nullable',
+        'description_en' => 'nullable|string',
+		'description_ru' => 'nullable|string',
         'image' => 'mimes:png',
         'reference_url' => 'nullable|between:3,200',
         'uses' => 'nullable|between:3,250',
