@@ -289,7 +289,7 @@ class WorldController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getItem($id)
-    {
+{
         $categories = ItemCategory::orderBy('sort', 'DESC')->get();
         $item = Item::where('id', $id)->released()->first();
         if(!$item) abort(404);
@@ -302,7 +302,10 @@ class WorldController extends Controller
             'categories' => $categories->keyBy('id'),
             'shops' => Shop::whereIn('id', ShopStock::where('item_id', $item->id)->pluck('shop_id')->unique()->toArray())->orderBy('sort', 'DESC')->get()
         ]);
-    }
+    } 
+
+
+
 
     /**
      * Shows the character categories page.
@@ -335,6 +338,8 @@ class WorldController extends Controller
             'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
+
+
 
     /**
      * Shows the prompts page.
@@ -390,4 +395,11 @@ class WorldController extends Controller
             'categories' => ['none' => 'Any Category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray()
         ]);
     }
+	public function edit($id)
+{
+    $item = Item::findOrFail($id);
+    return view('items.edit', compact('item'));
+}
+
+
 }
