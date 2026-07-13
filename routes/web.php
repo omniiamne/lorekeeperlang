@@ -19,13 +19,12 @@ Route::post('/set-locale', [App\Http\Controllers\LocaleController::class, 'set']
     ->name('locale.set');
 
 Route::get('set-locale/{locale}', function ($locale) {
-    // Проверка, что язык разрешён
     if (!in_array($locale, ['en', 'ru'])) {
         abort(404);
     }
     
-    session(['locale' => $locale]); // Сохраняем в сессию
-    return redirect()->back();     // Возвращаемся на ту же страницу, но с новой локалью
+    session(['locale' => $locale]);
+    return redirect()->back();
 })->name('set-locale');
 
 # BROWSE
