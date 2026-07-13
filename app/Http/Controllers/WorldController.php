@@ -290,35 +290,20 @@ class WorldController extends Controller
      */
     public function getItem($id)
 {
-    \Log::info('>>> START getItem >>> ID: ' . $id);
-
-    try {
-        \Log::info('Locale (app): ' . app()->getLocale());
-        \Log::info('Session locale: ' . (session('locale') ?? 'null'));
-
-        // Минимальная безопасная загрузка элемента
-        $item = \App\Models\Item::find($id);
-
-        if (!$item) {
-            \Log::warning('Item not found for ID: ' . $id);
-            abort(404);
-        }
-
-        \Log::info('Item loaded: ID=' . $item->id . ', name=' . ($item->displayName ?? 'no name'));
+        $categories = ItemCategory::orderBy('sort', 'DESC')->get();
+        $item = Item::where('id', $id)->released()->first();
+        if(!$item) abort(404);
 
         return view('world.item_page', [
             'item' => $item,
-            'imageUrl' => null,
-            'name' => $item->displayName ?? 'No name',
-            'categories' => collect(),
-            'shops' => collect()
+            'imageUrl' => $item->imageUrl,
+            'name' => $item->displayName,
+            'description' => $item->parsed_description,
+            'categories' => $categories->keyBy('id'),
+            'shops' => Shop::whereIn('id', ShopStock::where('item_id', $item->id)->pluck('shop_id')->unique()->toArray())->orderBy('sort', 'DESC')->get()
         ]);
-    } catch (\Exception $e) {
-        \Log::error('Exception in getItem: ' . $e->getMessage());
-        \Log::error($e->getTraceAsString());
-        throw $e;
-    }
-}
+    } 
+
 
 
 
@@ -354,10 +339,6 @@ class WorldController extends Controller
         ]);
     }
 
-	public function __construct()
-{
-    \Log::info('>>> CONSTRUCTOR WorldController CALLED');
-}
 
 
     /**
