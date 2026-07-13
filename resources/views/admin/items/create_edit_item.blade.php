@@ -80,6 +80,18 @@
     {!! Form::textarea('description', $item->description, ['class' => 'form-control wysiwyg']) !!}
 </div>
 
+<!-- Description EN -->
+<div class="form-group">
+    {!! Form::label('description_en', 'Description (EN)') !!}
+    {!! Form::textarea('description_en', $item->description_en, ['class' => 'form-control wysiwyg']) !!}
+</div>
+
+<!-- Description RU -->
+<div class="form-group">
+    {!! Form::label('description_ru', 'Описание (RU)') !!}
+    {!! Form::textarea('description_ru', $item->description_ru, ['class' => 'form-control wysiwyg']) !!}
+</div>
+
 @if(Config::get('lorekeeper.extensions.item_entry_expansion.extra_fields'))
     <div class="form-group">
         {!! Form::label('Uses (Optional)') !!} {!! add_help('A short description of the item\'s use(s). Supports raw HTML if need be, but keep it brief.') !!}
